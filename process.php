@@ -1,13 +1,12 @@
-
 <?php
 
 session_start();
 require_once 'conn.php';
 
 if (isset($_POST['save'])) {
-    $name = $_POST['name'];
-    $age = $_POST['age'];
-    $email = $_POST['email'];
+    $name = mysqli_real_escape_string($mysqli,$_POST['name']);
+    $age = mysqli_real_escape_string($mysqli,$_POST['age']);
+    $email = mysqli_real_escape_string($mysqli,$_POST['email']);
     $mysqli->query("INSERT INTO data (name,age,email) VALUES ('$name','$age','$email')") or die($mysqli->error);
     $_SESSION['msg'] = "Record has been saved";
     $_SESSION['msg_type'] = "success";
