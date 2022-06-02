@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <?php require_once 'process.php' ?>
+    <?php require_once 'process.php';?>
+    <?php require_once 'conn.php';?>
     <?php if (isset($_SESSION['msg'])) : ?>
         <div class="alert alert-<?php echo $_SESSION['msg_type']; ?> d-flex align-items-center alert-dismissible fade show" role="alert">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img">
@@ -24,56 +25,63 @@
         </div>
     <?php endif ?>
     <div class="container">
-        <form action="process.php" method="POST">
-            <div class="col-4 mx-auto mt-3">
-                <div class="mb-3">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control" placeholder="enter your full name" value="<?php echo $name; ?>">
-                </div>
-                <div class="mb-3">
-                    <label>Age</label>
-                    <input type="number" name="age" class="form-control" placeholder="enter your age" value="<?php echo $age; ?>">
-                </div>
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="name@example.com" value="<?php echo $email; ?>">
-                </div>
-                <div class="mb-3">
-                    <?php if ($update == true) : ?>
-                        <button type="submit" class="btn btn-outline-info" name="update">update</button>
-                    <?php else : ?>
-                        <button type="submit" class="btn btn-outline-success" name="save">Save</button>
-                    <?php endif ?>
-                </div>
+
+        <div class="card mx-auto mt-4" style="width: 18rem;">
+            <div class="card-body">
+                <form action="process.php" method="POST">
+                    <input type="hidden" name="id" value="<?php if (isset($_GET['edit'])){ echo $id; }?>">
+                    <div class="mb-3">
+                        <label>Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="enter your full name" value="<?php if (isset($_GET['edit'])){ echo $name; }?>" required="required">
+                    </div>
+                    <div class="mb-3">
+                        <label>Age <span class="text-danger">*</span></label>
+                        <input type="number" name="age" class="form-control" placeholder="enter your age" value="<?php if (isset($_GET['edit'])){ echo $age; }?>" required="required">
+                    </div>
+                    <div class="mb-3">
+                        <label>Email <span class="text-danger">*</span></label>
+                        <input type="email" name="email" class="form-control" placeholder="name@example.com" value="<?php if (isset($_GET['edit'])){ echo $email; }?>" required="required">
+                    </div>
+                    <div class="mb-3">
+                        <?php if (isset($_GET['edit'])) : ?>
+                            <button type="submit" class="btn btn-outline-primary" name="update">update</button>
+                        <?php else : ?>
+                            <button type="submit" class="btn btn-outline-success" name="save">Save</button>
+                        <?php endif ?>
+                    </div>
+                </form>
             </div>
-        </form>
-        <table class="table mt-5 border">
+        </div>
+
+        <table class="table table-light table-striped mt-5 border">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Email</th>
-                    <th scope="co2">Action</th>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Action</th>
                 </tr>
             </thead>
+            <Tbody>
             <?php
-            require_once 'conn.php';
             $result = $mysqli->query("SELECT*FROM data") or die($mysqli->error);
 
             while ($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <td scope="row"><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['id']; ?></td>
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['age']; ?></td>
                     <td><?php echo $row['email']; ?></td>
                     <td>
-                        <a href="process.php?edit=<?php echo $row['id']; ?>" class="btn btn-info">Edit</a>
+                        <a href="index.php?edit=<?php echo $row['id']; ?>" class="btn btn-primary">Edit</a>
                         <a href="process.php?delete=<?php echo $row['id']; ?>" class=" btn btn-danger">Delete</a>
                     </td>
                 </tr>
             <?php } ?>
+            </Tbody>      
         </table>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
