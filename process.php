@@ -1,4 +1,5 @@
 <?php
+<?php
 
 session_start();
 require_once 'conn.php';
@@ -21,16 +22,22 @@ if (isset($_GET['delete'])) {
     header("location:index.php");
 }
 
-$update = false;
-$name = "";
-$age = "";
-$email = "";
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $result = $mysqli->query("SELECT*FROM data WHERE id=$id") or die($mysqli->error);
-    $update = true;
-    $row = $result->fetch_array();
+    $row = $result->fetch_assoc();
     $name = $row['name'];
-    $location = $row['location'];
+    $age =  $row['age'];
+    $email = $row['email'];
+} 
+
+if (isset($_POST['update'])) {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $age = $_POST['age'];
+    $email = $_POST['email'];
+    $mysqli->query("UPDATE data SET name='$name', age='$age', email='$email' WHERE id=$id") or die($mysqli->error);
+    $_SESSION['msg'] = "Record has been updated";
+    $_SESSION['msg_type'] = "warning";
     header("location:index.php");
 }
