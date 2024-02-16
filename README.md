@@ -37,4 +37,4 @@ These instructions will help you set up and run the PHP and Bootstrap CRUD Appli
 1. Clone the repository to your local machine:
 
    ```shell
-   git clone https://github.com/yourusername/php-bootstrap-crud.git
+   git clone https://github.com/4zeddin/php-bootstrap-crud.git
